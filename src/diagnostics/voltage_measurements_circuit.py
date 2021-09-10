@@ -9,9 +9,11 @@ class VoltageMeasurementsCircuit():
 
     def calculate_voltages(self, adc_output_values = None):
             
+        offset_probably_due_to_opamp_power_to_measurement_too_small_difference = 0.7
+
         self.voltage_12v_rail = ( self.R5 + self.R6 ) / self.R5 * adc_output_values["12v"]
-        self.voltage_24v_rail = ( self.R3 + self.R4 ) / self.R4 * adc_output_values["24v"]
-        self.voltage_battery = (adc_output_values["battery"] + self.R1/self.R2 * adc_output_values["24v"]) * (self.R7+self.R8)/self.R8 * self.R2 / (self.R1 + self.R2)
+        self.voltage_24v_rail = ( self.R3 + self.R4 ) / self.R4 * adc_output_values["24v"] + offset_probably_due_to_opamp_power_to_measurement_too_small_difference
+        self.voltage_battery = (adc_output_values["battery"] + (self.R1 / self.R2) * self.voltage_24v_rail) * (self.R7 + self.R8) / self.R8 * self.R2 / (self.R1 + self.R2)
 
         return self
 

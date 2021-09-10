@@ -54,8 +54,8 @@ class DiagnosticsVoltageMeasurements():
 if __name__ == "__main__":
     try:
         diagnostics_voltage_measurements = DiagnosticsVoltageMeasurements("diagnostics/voltage_measurements")
-        diagnostics_voltage_measurements.add_voltage_measurement("24v", "diagnostics/adc_value_12v_rail")
-        diagnostics_voltage_measurements.add_voltage_measurement("12v", "diagnostics/adc_value_24v_rail")
+        diagnostics_voltage_measurements.add_voltage_measurement("12v", "diagnostics/adc_value_12v_rail")
+        diagnostics_voltage_measurements.add_voltage_measurement("24v", "diagnostics/adc_value_24v_rail")
         diagnostics_voltage_measurements.add_voltage_measurement("battery", "diagnostics/adc_value_battery")
 
         rate = rospy.Rate(10)
