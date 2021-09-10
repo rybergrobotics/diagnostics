@@ -1,0 +1,15 @@
+<launch>
+
+    <node pkg="diagnostics" name="voltage_measurements" 
+    type="voltage_measurements.py">
+    </node>
+
+    <node pkg="diagnostics" name="lamps" 
+    type="lamps.py">
+    </node>
+
+    <node pkg="diagnostics" name="ir_sensors" 
+    type="ir_sensors.py">
+    </node>
+
+</launch>
