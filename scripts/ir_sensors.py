@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 import rospy
-from std_msgs.msg import String, Int16
+from std_msgs.msg import String, Int16, Bool
+from diagnostics.msg import IrSensorsDiagnostics
 
 class DiagnosticsIrSensors():
     def __init__(self, diagnostics_ir_sensors_topic):
@@ -11,7 +12,7 @@ class DiagnosticsIrSensors():
 
         self.ir_sensors = {}
         
-        self.ir_sensor_diagnostics_publisher = rospy.Publisher(self.topic_name, String, queue_size=10)
+        self.ir_sensor_diagnostics_publisher = rospy.Publisher(self.topic_name, IrSensorsDiagnostics, queue_size=10)
 
     def add_ir_sensor(self, sensor_name, topic_name):
         subscriber = rospy.Subscriber(topic_name, Int16, self.ir_sensors_callback, ( sensor_name ))
@@ -25,11 +26,14 @@ class DiagnosticsIrSensors():
         self.ir_sensors[sensor_name]["value"] = data.data
 
     def publish_diagnostics(self):
-        
-        if (self.ir_sensors["1"]["value"] < 500):
-            message = String("Obstacle too close")
+        message = IrSensorsDiagnostics()
+
+        if (self.ir_sensors["1"]["value"] < 500 or self.ir_sensors["2"]["value"] < 500):
+            message.message = String("Obstacle too close")
+            message.ok = Bool(False)
         else:
-            message = String("No obstacle present")
+            message.message = String("No obstacle present")
+            message.ok = Bool(True)
 
         self.ir_sensor_diagnostics_publisher.publish(message)
 

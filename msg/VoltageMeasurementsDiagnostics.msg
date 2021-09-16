@@ -2,3 +2,4 @@ std_msgs/Float32 voltage_12v_rail
 std_msgs/Float32 voltage_24v_rail
 std_msgs/Float32 voltage_battery
 std_msgs/String message
+std_msgs/Bool ok

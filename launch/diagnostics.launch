@@ -12,4 +12,8 @@
     type="ir_sensors.py">
     </node>
 
+    <node pkg="diagnostics" name="led_controller" 
+    type="led_controller.py">
+    </node>
+
 </launch>

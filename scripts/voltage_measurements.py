@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import rospy
-from std_msgs.msg import Float32, Int16, String
+from std_msgs.msg import Float32, String, Bool
 
 from diagnostics.msg import VoltageMeasurementsDiagnostics
 from diagnostics.voltage_measurements_circuit import VoltageMeasurementsCircuit
@@ -44,8 +44,10 @@ class DiagnosticsVoltageMeasurements():
             
             if (self.voltage_measurements_circuit.get_battery_voltage() < 24.0 or self.voltage_measurements_circuit.get_battery_voltage() > 30):
                 message.message = String("Battery voltage too low!")
+                message.ok = Bool(False)
             else:
                 message.message = String("All voltages are OK!")
+                message.ok = Bool(True)
         else:
             message.message = String("No voltage readouts present yet")        
 

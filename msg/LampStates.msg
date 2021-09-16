@@ -6,3 +6,4 @@ std_msgs/Bool lamp_5
 std_msgs/Bool lamp_6
 std_msgs/Bool lamp_7
 std_msgs/Bool lamp_8
+std_msgs/Bool ok

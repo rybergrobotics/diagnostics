@@ -13,6 +13,7 @@ cmake_minimum_required(VERSION 2.8.3)
     LampDriverStates.msg
     LampsDiagnostics.msg
     VoltageMeasurementsDiagnostics.msg
+    IrSensorsDiagnostics.msg
   )
 
 catkin_python_setup()

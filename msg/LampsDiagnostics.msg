@@ -1,2 +1,3 @@
 diagnostics/LampStates lamp_states
 diagnostics/LampDriverStates lamp_driver_states
+std_msgs/Bool ok
