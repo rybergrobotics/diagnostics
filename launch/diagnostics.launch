@@ -13,7 +13,7 @@
     </node>
 
     <node pkg="diagnostics" name="led_controller" 
-    type="led_controller.py">
+    type="led_controller.py" output="screen">
     </node>
 
 </launch>
