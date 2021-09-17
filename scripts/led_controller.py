@@ -4,90 +4,77 @@ import enum
 import rospy
 from std_msgs.msg import String, Int16
 from std_srvs.srv import Empty
-from diagnostics.msg import IrSensorsDiagnostics, LampsDiagnostics, VoltageMeasurementsDiagnostics
+from diagnostics.srv import TurnLedOn, TurnLedOnRequest, TurnLedRed
 
 class LedController():
     def __init__(self):
         self.node_handler = rospy.init_node('diagnostics_led_controller')
 
-        self.lamps_that_are_on = {"1": False, "2": False, "3": False, "4": False,
-                                "5": False, "6": False, "7": False, "8": False}
+        self.leds = ["A1", "B1", "A2", "B2", "A3", "B3", "A4", "B4", "A5", "B5", "A6", "B6", "A7", "B7", "A8", "B8"]
 
-        self.lamps_and_drivers_diagnostics_status = None
-        self.voltage_measurements_diagnostics_status = None
-        self.ir_sensor_diagnostics_status = None
-        self.emergency_button_pressed = None
+        self.turn_led_on = rospy.ServiceProxy("led/turn_on", TurnLedOn)
+        self.turn_led_on_request = TurnLedOnRequest()
 
-        self.turn_leds_red = rospy.ServiceProxy("leds/turn_red", Empty)
-        self.turn_leds_orange = rospy.ServiceProxy("leds/turn_orange", Empty)
-        self.turn_leds_green = rospy.ServiceProxy("leds/turn_green", Empty)
-        self.turn_leds_off = rospy.ServiceProxy("leds/turn_off", Empty)
+        self.turn_front_leds_red_service = rospy.Service("leds/front/turn_red", Empty, self.turn_front_leds_red_handler)
+        self.turn_all_leds_orange_service = rospy.Service("leds/turn_orange", Empty, self.turn_all_leds_orange_handler)
+        self.turn_all_leds_green_service = rospy.Service("leds/turn_green", Empty, self.turn_all_leds_green_handler)
+        self.turn_led_red_service = rospy.Service("led/turn_red", TurnLedRed, self.turn_led_red_handler)
     
-        ir_sensors_diagnostics_subscriber = rospy.Subscriber("diagnostics/ir_sensors", IrSensorsDiagnostics, self.ir_sensors_diagnostics_callback)
-        lamps_diagnostics_subscriber = rospy.Subscriber("diagnostics/lamps", LampsDiagnostics, self.lamps_diagnostics_callback)
-        voltage_measurements_diagnostics_subscriber = rospy.Subscriber("diagnostics/voltage_measurements", VoltageMeasurementsDiagnostics, self.voltage_measurements_diagnostics_callback)
-
-        emergency_buutton_status_subscriber = rospy.Subscriber("/emergencybt_status", Int16, self.emergency_button_callback)
-
-        rospy.wait_for_message("diagnostics/ir_sensors", IrSensorsDiagnostics)
-        rospy.wait_for_message("diagnostics/lamps", LampsDiagnostics)
-        rospy.wait_for_message("diagnostics/voltage_measurements", VoltageMeasurementsDiagnostics)
-
-    def emergency_button_callback(self, data):
-        self.emergency_button_pressed = data.data
-
-    def ir_sensors_diagnostics_callback(self, data):
-        self.ir_sensor_diagnostics_status = data.ok.data            
-
-    def voltage_measurements_diagnostics_callback(self, data):
-        self.voltage_measurements_diagnostics_status = data.ok.data            
-
-    def lamps_diagnostics_callback(self, data):
-        for lamp_number in self.lamps_that_are_on:
-            self.lamps_that_are_on[lamp_number] = eval("data.lamp_states.lamp_" + str(lamp_number) + ".data")
-
-        self.lamps_and_drivers_diagnostics_status = data.ok.data            
-
-    def at_least_one_lamp_is_on(self):
-        for lamp, lamp_on in self.lamps_that_are_on.items():
-            if lamp_on:
-                return True
+    def turn_led_red_handler(self, req):
+        self.turn_led_red(req.led_name)
         
-        return False
+    def turn_led_red(self, led_name):
+        self.turn_led_on_request.led_name = led_name
+        self.turn_led_on_request.r = 255
+        self.turn_led_on_request.g = 0
 
-    def all_lamps_are_on(self):
-        return self.lamps_and_drivers_diagnostics_status == True
+        response = self.turn_led_on(self.turn_led_on_request)
 
-    def voltages_are_ok(self):
-        return self.voltage_measurements_diagnostics_status == True
+    def turn_led_green(self, led_name):
+        self.turn_led_on_request.led_name = led_name
+        self.turn_led_on_request.r = 0
+        self.turn_led_on_request.g = 255
 
-    def no_obstacle_present(self):
-        return self.ir_sensor_diagnostics_status == True
+        response = self.turn_led_on(self.turn_led_on_request)
+    
+    def turn_led_orange(self, led_name):
+        self.turn_led_on_request.led_name = led_name
+        self.turn_led_on_request.r = 255
+        self.turn_led_on_request.g = 255
 
-    def determine_and_send_leds_states(self):
-        try:
-            if self.at_least_one_lamp_is_on():
-                self.turn_leds_red()
-            
-            elif not self.at_least_one_lamp_is_on():
-            
-                if self.voltages_are_ok() and self.no_obstacle_present():
-                    self.turn_leds_green()
+        response = self.turn_led_on(self.turn_led_on_request)
+    
+    def turn_led_off(self, led_name):
+        self.turn_led_on_request.led_name = led_name
+        self.turn_led_on_request.r = 0
+        self.turn_led_on_request.g = 0
 
-                else:
-                    self.turn_leds_orange()
+        response = self.turn_led_on(self.turn_led_on_request)
+    
+    def turn_all_leds_off(self):
+        for led_name in self.leds:
+            self.turn_led_off(led_name)
 
-        except rospy.service.ServiceException as e:
-            pass
+    def turn_all_leds_orange_handler(self):
+        for led_name in self.leds:
+            self.turn_led_orange(led_name)
+
+    def turn_all_leds_green_handler(self):
+        for led_name in self.leds:
+            self.turn_led_green(led_name)
+    
+    def turn_front_leds_red_handler(self):
+        self.turn_led_red("A1")
+        self.turn_led_red("A5")
+        self.turn_led_red("B5")
+
 if __name__ == "__main__":
     try:
         
         led_controller = LedController()
-
         rate = rospy.Rate(10)
 
         while not rospy.is_shutdown():
-            led_controller.determine_and_send_leds_states()
             rate.sleep()
 
     except rospy.ROSInterruptException:
