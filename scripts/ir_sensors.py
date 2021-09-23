@@ -2,7 +2,7 @@
 
 import rospy
 from std_msgs.msg import String, Int16, Bool
-from diagnostics.msg import IrSensorsDiagnostics
+from diagnostics_msgs.msg import IrSensorsDiagnostics
 
 class DiagnosticsIrSensors():
     def __init__(self, diagnostics_ir_sensors_topic):

@@ -4,7 +4,7 @@ import enum
 import rospy
 from std_msgs.msg import String, Int16
 from std_srvs.srv import Empty
-from diagnostics.srv import TurnLedOn, TurnLedOnRequest, TurnLedRed
+from diagnostics_srvs.srv import TurnLedOn, TurnLedOnRequest, TurnLedRed
 
 class LedController():
     def __init__(self):

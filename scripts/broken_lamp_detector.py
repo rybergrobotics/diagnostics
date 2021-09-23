@@ -7,7 +7,6 @@ class BrokenLampDetector():
     def __init__(self):
         self.node_handler = rospy.init_node('broken_lamp_detector')
 
-
         self.lamps = {"1": {"turned_on": False, "actually_on": False}, "2": {"turned_on": False, "actually_on": False},
                         "3": {"turned_on": False, "actually_on": False}, "4": {"turned_on": False, "actually_on": False},
                         "5": {"turned_on": False, "actually_on": False}, "6": {"turned_on": False, "actually_on": False},
@@ -17,7 +16,7 @@ class BrokenLampDetector():
 
         lamps_diagnostics_subscriber = rospy.Subscriber("diagnostics/lamps", LampsDiagnostics, self.lamps_diagnostics_callback)
         lamps_try_turn_on_service = rospy.Service("broken_lamp/notify_try_in_turn_on", BrokenLamp, self.try_turning_on_handler)
-
+        
         self.broken_lamps_publisher = rospy.Publisher("broken_lamps", LampStates)
 
     def try_turning_on_handler(self, req):

@@ -3,8 +3,8 @@
 import rospy
 from std_msgs.msg import Float32, String, Bool
 
-from diagnostics.msg import VoltageMeasurementsDiagnostics
-from diagnostics.voltage_measurements_circuit import VoltageMeasurementsCircuit
+from diagnostics_msgs.msg import VoltageMeasurementsDiagnostics
+from voltage_measurements_circuit.voltage_measurements_circuit import VoltageMeasurementsCircuit
 
 class DiagnosticsVoltageMeasurements():
     def __init__(self, diagnostics_voltage_measurements_topic):

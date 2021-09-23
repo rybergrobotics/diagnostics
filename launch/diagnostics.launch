@@ -16,8 +16,8 @@
     type="led_controller.py" output="screen">
     </node>
 
-    <node pkg="diagnostics" name="broken_lamps_detector" 
+    <!-- <node pkg="diagnostics" name="broken_lamps_detector" 
     type="broken_lamps_detector.py">
-    </node>
+    </node> -->
 
 </launch>

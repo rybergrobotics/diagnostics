@@ -2,7 +2,7 @@
 
 import rospy
 from std_msgs.msg import Bool
-from diagnostics.msg import LampsDiagnostics
+from diagnostics_msgs.msg import LampsDiagnostics
 
 class DiagnosticsLamps():
     def __init__(self, diagnostics_lamps_topic):

@@ -4,8 +4,8 @@ import enum
 import rospy
 from std_msgs.msg import String, Int16
 from std_srvs.srv import Empty
-from diagnostics.msg import IrSensorsDiagnostics, LampsDiagnostics, VoltageMeasurementsDiagnostics
-from diagnostics.srv import TurnLedRed
+from diagnostics_msgs.msg import IrSensorsDiagnostics, LampsDiagnostics, VoltageMeasurementsDiagnostics
+from diagnostics_srvs.srv import TurnLedRed
 
 class Diagnostics():
     def __init__(self):

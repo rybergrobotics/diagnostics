@@ -1,5 +1,0 @@
-std_msgs/Bool lamp_driver_1
-std_msgs/Bool lamp_driver_2
-std_msgs/Bool lamp_driver_3
-std_msgs/Bool lamp_driver_4
-std_msgs/Bool ok
