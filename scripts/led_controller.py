@@ -18,6 +18,8 @@ class LedController():
         self.turn_front_leds_red_service = rospy.Service("leds/front/turn_red", Empty, self.turn_front_leds_red_handler)
         self.turn_all_leds_orange_service = rospy.Service("leds/turn_orange", Empty, self.turn_all_leds_orange_handler)
         self.turn_all_leds_green_service = rospy.Service("leds/turn_green", Empty, self.turn_all_leds_green_handler)
+        self.turn_all_leds_off_service = rospy.Service("leds/turn_off", Empty, self.turn_all_leds_off_handler)
+
         self.turn_led_red_service = rospy.Service("led/turn_red", TurnLedRed, self.turn_led_red_handler)
     
     def turn_led_red_handler(self, req):
@@ -51,7 +53,7 @@ class LedController():
 
         response = self.turn_led_on(self.turn_led_on_request)
     
-    def turn_all_leds_off(self, req):
+    def turn_all_leds_off_handler(self, req):
         for led_name in self.leds:
             self.turn_led_off(led_name)
 
